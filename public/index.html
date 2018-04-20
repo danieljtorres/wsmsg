@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <style>
+            input, select, button{
+                width: 400px;
+                margin: 10px;
+                padding: 5px;
+            }
+
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script>
+            angular.module("ytzsu", [])
+            
+
+            angular.module("ytzsu")
+                .controller("mainController", ["$http",function($http){
+                    
+                    var bz = this;
+
+                    bz.numeros = [];
+
+                    $http.get("/numeros")
+                        .then(function(res){
+                            //
+                        })
+                        .catch(function(){
+                            //
+                        })
+                        .finally(function(){
+
+                        })
+
+                    bz.numeros = [{nombre: "Sinai Rodriguez", numero: "3208858042"},{numero: "3115473056", nombre: "Kiray el Gordito"}]
+                }])
+
+        </script>
+    </head>
+    <body ng-app="ytzsu">
+        <div ng-controller="mainController as main">
+            <div>
+                <input type="text" placeholder="Buscar por nombre o numero" ng-model="main.filtro"/>
+            </div>
+            <div>
+                <select ng-model="main.seleccionado">
+                    <option ng-repeat="numero in  main.numeros | filter: {$: main.filtro}" ng-value="numero">{{numero.nombre}} (+57{{numero.numero}})</option>
+                </select>
+            </div>
+
+            <div>
+                <a ng-href="{{'https://api.whatsapp.com/send?phone=57'+main.seleccionado.numero+'&text=Hola'}}"><button>Enviar a: {{main.seleccionado.nombre}} (+57{{main.seleccionado.numero}})</button></a>
+            </div>
+
+        </div>
+    </body>
+</html>
