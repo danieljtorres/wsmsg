@@ -22,7 +22,7 @@
 
                     $http.get("/numeros")
                         .then(function(res){
-                            //
+                            bz.numeros = res.data.data;
                         })
                         .catch(function(){
                             //
@@ -31,7 +31,6 @@
 
                         })
 
-                    bz.numeros = [{nombre: "Sinai Rodriguez", numero: "3208858042"},{numero: "3115473056", nombre: "Kiray el Gordito"}]
                 }])
 
         </script>

@@ -4,11 +4,12 @@ const app = express();
 const port = 666;
 
 const mysql      = require('mysql');
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'wsmsg'
+const pool = mysql.createPool({
+    connectionLimit : 10, // default = 10
+    host            : 'localhost',
+    user            : 'root',
+    password        : '',
+    database        : 'wsmsg'
 });
 
 app.get('/', function(req, res){
@@ -16,17 +17,17 @@ app.get('/', function(req, res){
 });
 
 app.get('/numeros', function (req, res) {
-    connection.connect();
-
-    connection.query('SELECT * FROM numeros', function (error, results, fields) {
-        if (error) throw error;
-        
-        if (results.length) {
-            res.status(200).json({data:results});
-        } else {
-            res.status(404).json({data: 'No se encontraron resultados'});
-        }
-        connection.end();
+    pool.getConnection(function (err, connection) {
+        connection.query('SELECT * FROM numeros', function (error, results, fields) {
+            connection.release();
+            if (error) console.log(error);
+            
+            if (results.length) {
+                res.status(200).json({data:results});
+            } else {
+                res.status(404).json({data: 'No se encontraron resultados'});
+            }
+        });
     });
 
 });
